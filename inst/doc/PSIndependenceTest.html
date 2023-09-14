@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>PSIndependenceTest</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">PSIndependenceTest</h1>
+
+
+
+<div id="psindependencetest-independence-tests-for-two-way-three-way-and-four-way-contingency-tables" class="section level1">
+<h1>PSIndependenceTest: Independence Tests for Two-Way, Three-Way and
+Four-Way Contingency Tables</h1>
+<p><strong>author: Piotr Sulewski, Pomeranian University</strong>
+<!-- badges: start --> <!-- badges: end --></p>
+<p>The goal of the package is to put into practice the modular and
+logarithmic minimum tests for independence in two-way, three-way and
+four-way contingency tables. Statistic value, cv value and p-value are
+calculated. This package also includes three table generation functions
+and six data sets. To read more about the package please see (and cite
+:)) papers:</p>
+<p>Sulewski, P. (2016). Moc testów niezależności w tablicy dwudzielczej
+większej niż 2×2. Przegląd statystyczny 63(2), 190-210.</p>
+<p>Sulewski, P. (2019). The LMS for Testing Independence in Two-way
+Contingency Tables. Biometrical Letters 56(1), 17-43.</p>
+<p>Sulewski, P. (2018). Power Analysis Of Independence Testing for the
+Three-Way Con-tingency Tables of Small Sizes. Journal of Applied
+Statistics 45(13), 2481-2498.</p>
+<p>Sulewski, P. (2021). Logarithmic Minimum Test for Independence in
+Three Way Con-tingency Table of Small Sizes. Journal of Statistical
+Computation and Simulation 91(13), 2780-2799.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>You can install the released version of
+<strong>PSIndependenceTest</strong> from CRAN with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;PSIndependenceTest&quot;</span>)</span></code></pre></div>
+<p>You can install the development version of
+<strong>PSIndependenceTest</strong> from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;PiotrSule/PSIndependenceTest&quot;</span>)</span></code></pre></div>
+<p><strong>This package includes four data sets</strong></p>
+<p>The first one, <strong>table1</strong>, consist of 40 observations
+presented as two-way contingency table 2 x 2. See details: Sulewski, P.
+(2017). A new test for independence in 2x2 contingency tables. Acta
+Universitatis Lodziensis. Folia Oeconomica 4(330), 55–75.</p>
+<p>The second one, <strong>table2</strong>, consist of 25 observations
+described the effect of a treatment for rheumatoid arthritis vs. a
+placebo presented as two-way contingency table 2 x 3. See details:
+Sulewski, P. (2019). The LMS for Testing Independence in Two-way
+Contingency Tables. Biometrical Letters 56 (1), 17-43.</p>
+<p>The third one, <strong>table3</strong>, consist of 695 observations
+described the frequency of watching videos at home or at friends’ homes
+for young people between 7 and 15 years of age, cross-classified
+according to age and sex. Data are presented as three-way contingency
+table 3 x 3 x 2. See details: Sulewski, P. (2021). Logarithmic Minimum
+Test for Independence in Three Way Contingency Table of Small Sizes.
+Journal of Statistical Computation and Simulation 91(13), 2780-2799</p>
+<p>The fourth one, <strong>table4</strong>, consist of 100 observations
+obtained using the Monte Carlo method when Ho is true, i.e. all
+probabilities pijt equal 1/24. Data is presented as three-way
+contingency table 2 x 3 x 4.</p>
+<p>The fifth one, <strong>table5</strong>,provides information on the
+fate of passengers on the fatal maiden voyage of the ocean liner
+‘Titanic’, summarized according to economic status (class), sex, age and
+survival. Data is presented as four-way contingency table 4 x 2 x 2 x 2.
+The sample size equals 2201.</p>
+<p>The sixth one, <strong>table6</strong>, consist of 100 observations
+obtained using the Monte Carlo method when Ho is true, i.e. all
+probabilities pijtu equal 1/16. Data is presented as four-way
+contingency table 2 x 2 x 2 x 2.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(PSIndependenceTest)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">dim</span>(table1)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 2 2</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">length</span>(table2)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [1] 6</span></span></code></pre></div>
+<div id="functions" class="section level3">
+<h3>Functions</h3>
+<p><strong>GenTab2</strong></p>
+<p>This function generating the two-way contingency table with the Monte
+Carlo method</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">GenTab2</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">4</span>), <span class="dv">50</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4]</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; [1,]    7    4    7    8</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [2,]    9    3    5    7</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">GenTab2</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>), <span class="dv">60</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; [1,]    5    6    4</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; [2,]    4    6    1</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; [3,]    7    4    5</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; [4,]    5    8    5</span></span></code></pre></div>
+<p><strong>Mod2.stat</strong></p>
+<p>This function returns the statistic value of the modular independence
+test in the two-way contingency table.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">Mod2.stat</span>(table1)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] 1.273572</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">Mod2.stat</span>(<span class="fu">GenTab2</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">9</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>), <span class="dv">90</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.159993</span></span></code></pre></div>
+<p><strong>Mod2.cv</strong></p>
+<p>This function returns the critical value of the modular independence
+test in the two-way contingency table.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">Mod2.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">40</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e3</span>) </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] 1.265177</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">Mod2.cv</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">60</span>, <span class="fl">0.1</span>) </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.538552</span></span></code></pre></div>
+<p><strong>Mod2.pvalue</strong></p>
+<p>This function returns the p-value of the modular independence test in
+the two-way contingency table.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">Mod2.pvalue</span>(<span class="fu">Mod2.stat</span>(table1), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">40</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.03696304</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">Mod2.pvalue</span>(<span class="fu">Mod2.stat</span>(table2), <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">60</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.7055294</span></span></code></pre></div>
+<p><strong>Mod2.test</strong></p>
+<p>This function returns the test statistic and p-value of the
+logarithmic minimum independence test in the two-way contingency
+table.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">Mod2.test</span>(table1, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in two-way contingency table</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; data:  table1</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; D = 1.2736, p-value = 0.0471</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">Mod2.test</span>(table2)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in two-way contingency table</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; data:  table2</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; D = 0.61103, p-value = 0.6967</span></span></code></pre></div>
+<p><strong>Lms2.stat</strong></p>
+<p>This function returns the statistic value of the logarithmic minimum
+independence test in the two-way contingency table.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">Lms2.stat</span>(table1)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] 1.660665</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">Lms2.stat</span>(<span class="fu">GenTab2</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">9</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>), <span class="dv">90</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.716954</span></span></code></pre></div>
+<p><strong>Lms2.cv</strong></p>
+<p>This function returns the critical value of the logarithmic minimum
+independence test in the two-way contingency table.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">Lms2.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">40</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e3</span>) </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1] 1.317246</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">Lms2.cv</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)  </span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.610358</span></span></code></pre></div>
+<p><strong>Lms2.pvalue</strong></p>
+<p>This function returns the p-value of the logarithmic minimum
+independence test in the two-way contingency table.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">Lms2.pvalue</span>(<span class="fu">Lms2.stat</span>(table1), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">40</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.01498501</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">Lms2.pvalue</span>(<span class="fu">Lms2.stat</span>(table2), <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">60</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.6987301</span></span></code></pre></div>
+<p><strong>Lms2.test</strong></p>
+<p>This function returns the test statistic and p-value of the
+logarithmic minimum independence test in the two-way contingency
+table.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">Lms2.test</span>(table1, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in two-way contingency table</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; data:  table1</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; D = 1.6607, p-value = 0.0202</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">Lms2.test</span>(table2)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in two-way contingency table</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; data:  table2</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; D = 0.61437, p-value = 0.6971</span></span></code></pre></div>
+<p><strong>GenTab3</strong></p>
+<p>This function generating the three-way contingency table with the
+Monte Carlo method</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">GenTab3</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)), <span class="dv">60</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; , , 1</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [1,]    2    4</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; [2,]    8    1</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; , , 2</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; [1,]    3    5</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; [2,]    6    6</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; , , 3</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; [1,]    6   10</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; [2,]    5    4</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="fu">GenTab3</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">18</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>)), <span class="dv">80</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; , , 1</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; [1,]    3    2    8</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; [2,]    1    2    9</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; , , 2</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; [1,]    9    5    2</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; [2,]    3    6    4</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a><span class="co">#&gt; , , 3</span></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a><span class="co">#&gt; [1,]    1    6    6</span></span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a><span class="co">#&gt; [2,]    5    3    5</span></span></code></pre></div>
+<p><strong>Mod3.stat</strong></p>
+<p>This function returns the statistic value of the modular independence
+test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">Mod3.stat</span>(table3)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; [1] 2.641208</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">Mod3.stat</span>(<span class="fu">GenTab3</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)), <span class="dv">120</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [1] 2.08114</span></span></code></pre></div>
+<p><strong>Mod3.cv</strong></p>
+<p>This function returns the critical value of the modular independence
+test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">Mod3.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e3</span>) </span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&gt; [1] 2.39056</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">Mod3.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="fl">0.1</span>) </span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1] 2.180014</span></span></code></pre></div>
+<p><strong>Mod3.pvalue</strong></p>
+<p>This function returns the p-value of the modular independence test in
+the three-way contingency table.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">Mod3.pvalue</span>(<span class="fu">Mod3.stat</span>(table4), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.02097902</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">Mod3.pvalue</span>(<span class="fu">Mod3.stat</span>(table4), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.02489751</span></span></code></pre></div>
+<p><strong>Mod3.test</strong></p>
+<p>This function returns the test statistic and p-value of the modular
+independence test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">Mod3.test</span>(table4, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in three-way contingency table</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt; data:  table4</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; D = 2.5886, p-value = 0.0261</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="fu">Mod3.test</span>(table4, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in three-way contingency table</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; data:  table4</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt; D = 2.5886, p-value = 0.0237</span></span></code></pre></div>
+<p><strong>Lms3.stat</strong></p>
+<p>This function returns the statistic value of the logarithmic minimum
+independence test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">Lms3.stat</span>(table3)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; [1] 2.712789</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">Lms3.stat</span>(<span class="fu">GenTab3</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)), <span class="dv">120</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&gt; [1] 2.865513</span></span></code></pre></div>
+<p><strong>Lms3.cv</strong></p>
+<p>This function returns the critical value of the logarithmic minimum
+independence test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">Lms3.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e2</span>) </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; [1] 2.64121</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">Lms3.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="fl">0.1</span>, <span class="at">B =</span> <span class="fl">1e3</span>) </span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1] 2.326221</span></span></code></pre></div>
+<p><strong>Lms3.pvalue</strong></p>
+<p>This function returns the p-value of the logarithmic minimum
+independence test in the three-way contingency table.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">Lms3.pvalue</span>(<span class="fu">Lms3.stat</span>(table4), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.04095904</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">Lms3.pvalue</span>(<span class="fu">Lms3.stat</span>(table4), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">80</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.03789621</span></span></code></pre></div>
+<p><strong>Lms3.test</strong></p>
+<p>This function returns the test statistic and p-value of the
+logarithmic minimum independence test in the three-way contingency
+table.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">Lms3.test</span>(table4, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt;  Logarithmic minimum test for independence in three-way contingency</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt;  table</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; data:  table4</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; D = 2.6637, p-value = 0.0381</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">Lms3.test</span>(table4, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt;  Logarithmic minimum test for independence in three-way contingency</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt;  table</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="co">#&gt; data:  table4</span></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co">#&gt; D = 2.6637, p-value = 0.0406</span></span></code></pre></div>
+<p><strong>GenTab4</strong></p>
+<p>This function generating the four-way contingency table with the
+Monte Carlo method.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">GenTab4</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">16</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)), <span class="dv">100</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; , , 1, 1</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt; [1,]    4   11</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&gt; [2,]    8    5</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="co">#&gt; , , 2, 1</span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="co">#&gt; [1,]    4    9</span></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="co">#&gt; [2,]    5    5</span></span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co">#&gt; , , 1, 2</span></span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a><span class="co">#&gt; [1,]    9    3</span></span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a><span class="co">#&gt; [2,]    9    7</span></span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a><span class="co">#&gt; , , 2, 2</span></span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2]</span></span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a><span class="co">#&gt; [1,]    3    7</span></span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a><span class="co">#&gt; [2,]    4    7</span></span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a><span class="fu">GenTab4</span>(<span class="fu">array</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">36</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>)), <span class="dv">150</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" tabindex="-1"></a><span class="co">#&gt; , , 1, 1</span></span>
+<span id="cb22-27"><a href="#cb22-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-28"><a href="#cb22-28" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-29"><a href="#cb22-29" tabindex="-1"></a><span class="co">#&gt; [1,]    6    2    7</span></span>
+<span id="cb22-30"><a href="#cb22-30" tabindex="-1"></a><span class="co">#&gt; [2,]    3    3    4</span></span>
+<span id="cb22-31"><a href="#cb22-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-32"><a href="#cb22-32" tabindex="-1"></a><span class="co">#&gt; , , 2, 1</span></span>
+<span id="cb22-33"><a href="#cb22-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-34"><a href="#cb22-34" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-35"><a href="#cb22-35" tabindex="-1"></a><span class="co">#&gt; [1,]    5    2    4</span></span>
+<span id="cb22-36"><a href="#cb22-36" tabindex="-1"></a><span class="co">#&gt; [2,]    4    7    3</span></span>
+<span id="cb22-37"><a href="#cb22-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-38"><a href="#cb22-38" tabindex="-1"></a><span class="co">#&gt; , , 1, 2</span></span>
+<span id="cb22-39"><a href="#cb22-39" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-40"><a href="#cb22-40" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-41"><a href="#cb22-41" tabindex="-1"></a><span class="co">#&gt; [1,]    4    5    3</span></span>
+<span id="cb22-42"><a href="#cb22-42" tabindex="-1"></a><span class="co">#&gt; [2,]    4    1    4</span></span>
+<span id="cb22-43"><a href="#cb22-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-44"><a href="#cb22-44" tabindex="-1"></a><span class="co">#&gt; , , 2, 2</span></span>
+<span id="cb22-45"><a href="#cb22-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-46"><a href="#cb22-46" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-47"><a href="#cb22-47" tabindex="-1"></a><span class="co">#&gt; [1,]    1    4    6</span></span>
+<span id="cb22-48"><a href="#cb22-48" tabindex="-1"></a><span class="co">#&gt; [2,]    4    4    5</span></span>
+<span id="cb22-49"><a href="#cb22-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-50"><a href="#cb22-50" tabindex="-1"></a><span class="co">#&gt; , , 1, 3</span></span>
+<span id="cb22-51"><a href="#cb22-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-52"><a href="#cb22-52" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-53"><a href="#cb22-53" tabindex="-1"></a><span class="co">#&gt; [1,]    1    3    9</span></span>
+<span id="cb22-54"><a href="#cb22-54" tabindex="-1"></a><span class="co">#&gt; [2,]    5    6    7</span></span>
+<span id="cb22-55"><a href="#cb22-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-56"><a href="#cb22-56" tabindex="-1"></a><span class="co">#&gt; , , 2, 3</span></span>
+<span id="cb22-57"><a href="#cb22-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-58"><a href="#cb22-58" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span id="cb22-59"><a href="#cb22-59" tabindex="-1"></a><span class="co">#&gt; [1,]    3    3    5</span></span>
+<span id="cb22-60"><a href="#cb22-60" tabindex="-1"></a><span class="co">#&gt; [2,]    5    3    5</span></span></code></pre></div>
+<p><strong>Mod4.stat</strong></p>
+<p>This function returns the statistic value of the modular independence
+test in the four-way contingency table.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">Mod4.stat</span>(table5)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt; [1] 46.70092</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">Mod4.stat</span>(table6)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; [1] 3.7301</span></span></code></pre></div>
+<p><strong>Mod4.cv</strong></p>
+<p>This function returns the critical value of the modular independence
+test in the four-way contingency table.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">Mod4.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&gt; [1] 4.541579</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">Mod4.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="fl">0.1</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&gt; [1] 4.368907</span></span></code></pre></div>
+<p><strong>Mod4.pvalue</strong></p>
+<p>This function returns the p-value of the modular independence test in
+the four-way contingency table.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">Mod4.pvalue</span>(<span class="fu">Mod4.stat</span>(table6), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.3366337</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">Mod4.pvalue</span>(<span class="fu">Mod4.stat</span>(table6), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.2807193</span></span></code></pre></div>
+<p><strong>Mod4.test</strong></p>
+<p>This function returns the test statistic and p-value of the modular
+independence test in the -way contingency table.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">Mod4.test</span>(table6, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in four-way contingency table</span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt; data:  table6</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt; D = 3.7301, p-value = 0.3216</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="fu">Mod4.test</span>(table6, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="co">#&gt;  Modular test for independence in four-way contingency table</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co">#&gt; data:  table6</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt; D = 3.7301, p-value = 0.3146</span></span></code></pre></div>
+<p><strong>Lms4.stat</strong></p>
+<p>This function returns the statistic value of the logarithmic minimum
+independence test in the four-way contingency table.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">Lms4.stat</span>(table5)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&gt; [1] 116.0267</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">Lms4.stat</span>(table6)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&gt; [1] 4.097161</span></span></code></pre></div>
+<p><strong>Lms4.cv</strong></p>
+<p>This function returns the critical value of the logarithmic minimum
+independence test in the four-way contingency table.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">Lms4.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="fl">0.05</span>, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&gt; [1] 5.097392</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">Lms4.cv</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="fl">0.1</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&gt; [1] 4.651462</span></span></code></pre></div>
+<p><strong>Lms4.pvalue</strong></p>
+<p>This function returns the p-value of the logarithmic minimum
+independence test in the four-way contingency table.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">Lms4.pvalue</span>(<span class="fu">Lms4.stat</span>(table6), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.2475248</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">Lms4.pvalue</span>(<span class="fu">Lms4.stat</span>(table6), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">160</span>, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.2307692</span></span></code></pre></div>
+<p><strong>Lms4.test</strong></p>
+<p>This function returns the test statistic and p-value of the
+logarithmic minimum independence test in the four-way contingency
+table.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">Lms4.test</span>(table6, <span class="at">B =</span> <span class="fl">1e2</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">#&gt;  Logarithmic minimum test for independence in four-way contingency table</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co">#&gt; data:  table6</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="co">#&gt; D = 4.0972, p-value = 0.2501</span></span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="fu">Lms4.test</span>(table6, <span class="at">B =</span> <span class="fl">1e3</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="co">#&gt;  Logarithmic minimum test for independence in four-way contingency table</span></span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a><span class="co">#&gt; data:  table6</span></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="co">#&gt; D = 4.0972, p-value = 0.2472</span></span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

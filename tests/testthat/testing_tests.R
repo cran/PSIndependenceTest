@@ -1,0 +1,18 @@
+test_that("Statistic formula is correct",{expect_equal(round(Mod2.stat(table1),4),1.2736)})
+test_that("Result is a number",{expect_true(is.numeric(Mod2.cv(2, 3, 50, 0.05)))})
+test_that("An invalid number of parameters",{expect_error(Mod2.pvalue())})
+test_that("Statistic formula is correct",{expect_equal(round(Lms2.stat(table2),4),0.6144)})
+test_that("Result is a number",{expect_true(is.numeric(Lms2.cv(2, 3, 50, 0.05)))})
+test_that("An invalid number of parameters",{expect_error(Lms2.pvalue())})
+test_that("Statistic formula is correct",{expect_equal(round(Mod3.stat(table3),4),2.6412)})
+test_that("Result is a number",{expect_true(is.numeric(Mod3.cv(2, 3, 3, 50, 0.05)))})
+test_that("An invalid number of parameters",{expect_error(Mod3.pvalue())})
+test_that("Statistic formula is correct",{expect_equal(round(Lms3.stat(table4),4),2.6637)})
+test_that("Result is a number",{expect_true(is.numeric(Lms3.cv(2, 3, 2, 50, 0.05)))})
+test_that("An invalid number of parameters",{expect_error(Lms3.pvalue())})
+test_that("Statistic formula is correct",{expect_equal(round(Lms4.stat(table5),4),116.0267)})
+test_that("An invalid number of parameters",{expect_error(Lms4.pvalue())})
+test_that("Statistic formula is correct",{expect_equal(round(Mod4.stat(table5),4),46.7009)})
+test_that("An invalid number of parameters",{expect_error(Mod4.pvalue())})
+
+
